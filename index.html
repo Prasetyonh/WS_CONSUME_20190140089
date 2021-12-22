@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="jquery.js"></script>
+
+    <title>Assessment WS</title>
+  </head>
+
+  <body>
+    <div class="container mt-5">
+      <h1 class="text-center">DATA MAHASISWA</h1>
+
+      <input
+        class="btn btn-outline-primary"
+        type="button"
+        value="JSON"
+        id="btnJSON"
+      />
+      <input class="btn btn-primary" type="button" value="XML" id="btnXML" />
+
+      <table class="table" id="table">
+        <thead>
+          <tr>
+            <th>NIM</th>
+            <th>Nama</th>
+            <th>Program Studi</th>
+            <th>Fakultas</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </body>
+
+  <script>
+    // XML
+    $(document).ready(function () {
+      $("#btnXML").click(function () {
+        $("#tableBody").empty();
+        $.ajax({
+          type: "GET",
+          url: "http://localhost:8080/data/xml",
+          dataType: "xml",
+          success: function (xml) {
+            $(xml)
+              .find("item")
+              .each(function () {
+                $("#tableBody").append(
+                  "<tr>" +
+                    "<td>" +
+                    $(this).find("nim").text() +
+                    "</td> " +
+                    "<td>" +
+                    $(this).find("nama").text() +
+                    "</td> " +
+                    "<td>" +
+                    $(this).find("programstudi").text() +
+                    "</td> " +
+                    "<td>" +
+                    $(this).find("fakultas").text() +
+                    "</td> " +
+                    "<td>" +
+                    "</tr>"
+                );
+              });
+          },
+        });
+      });
+    });
+
+    //JSON
+
+    $(document).ready(function () {
+      $("#btnJSON").click(function () {
+        $("#tableBody").empty();
+        $.ajax({
+          type: "GET",
+          url: "http://localhost:8080/data/json",
+          data: { get_param: "value" },
+          dataType: "json",
+          success: function (data) {
+            $.each(data, function (index, element) {
+              $("#tableBody").append(
+                "<tr>" +
+                  "<td>" +
+                  element.nim +
+                  "</td> " +
+                  "<td>" +
+                  element.nama +
+                  "</td> " +
+                  "<td>" +
+                  element.programstudi +
+                  "</td> " +
+                  "<td>" +
+                  element.fakultas +
+                  "</td> " +
+                  "<td>" +
+                  "</tr>"
+              );
+            });
+          },
+        });
+      });
+    });
+  </script>
+</html>
